@@ -1,5 +1,3 @@
-using TPWProject;
-
 namespace TPWProject.UnitTests
 {
     [TestClass]
@@ -9,7 +7,7 @@ namespace TPWProject.UnitTests
         public void TestMethod1()
         {
             var class1 = new Class1();
-            Assert.AreEqual(1, class1.return1());
+            Assert.AreEqual(1, class1.HelloWorld());
         }
     }
 }
