@@ -23,5 +23,13 @@ namespace Logic
         {
             Balls.Add(b);
         }
+
+        public void updatePosition()
+        {
+            foreach (Ball ball in Balls) 
+            {
+                ball.updatePosition();
+            }
+        }
     }
 }
