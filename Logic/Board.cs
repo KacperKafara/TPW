@@ -28,7 +28,7 @@ namespace Logic
         {
             foreach (Ball ball in Balls) 
             {
-                ball.updatePosition();
+                ball.updatePosition(this);
             }
         }
     }

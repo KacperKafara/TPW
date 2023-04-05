@@ -14,7 +14,7 @@ namespace ViewModel
         {
             Api = ModelApi.Instance();
             Balls = Api.balls;
-            Api.AddBalls(1);
+            Api.AddBalls(3);
 
             aTimer = new System.Timers.Timer();
             aTimer.Interval = 1000 / 60;

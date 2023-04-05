@@ -34,7 +34,7 @@ namespace Model
             {
                 for (int i = 0; i < number; i++)
                 {
-                    Ball ball = new Ball(10, 10, 10);
+                    Ball ball = new Ball(490+i*10, 500, 10);
                     logicApi.AddBall(ball);
                     balls.Add(new BallModel(ball));
                 }

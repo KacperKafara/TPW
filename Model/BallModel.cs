@@ -53,7 +53,7 @@ namespace Model
         {
             X = Ball.X;
             Y = Ball.Y;
-            //System.Diagnostics.Debug.WriteLine("X: {0}, Y: {1}", X, Y);
+            System.Diagnostics.Debug.WriteLine("X: {0}, Y: {1}", X, Y);
         }
     }
 }
