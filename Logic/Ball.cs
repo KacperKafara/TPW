@@ -9,7 +9,7 @@
         public int Radius { get; set; }
 
         private Random rnd;
-        private int Speed=4;
+        private int Speed = 4;
 
         public Ball(float x, float y, int radius)
         {
@@ -21,7 +21,7 @@
             VerticalSpeed = generateRandomSpeed();
         }
 
-        public float generateRandomSpeed()
+        private float generateRandomSpeed()
         {
             float speed;
             do
@@ -29,7 +29,7 @@
                 speed = rnd.NextSingle() * Speed - Speed / 2;
             }
             while (speed == 0);
-            return speed;
+            return speed * 2;
         }
 
         public void updatePosition(Board board)

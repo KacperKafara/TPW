@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic
+﻿namespace Logic
 {
     public abstract class LogicApi
     {
@@ -17,7 +11,7 @@ namespace Logic
         }
         private class Logic : LogicApi
         {
-            public Logic() 
+            public Logic()
             {
                 Board = new Board(500, 500);
             }

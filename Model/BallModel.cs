@@ -1,6 +1,5 @@
 ﻿using Logic;
 using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace Model
 {
@@ -53,7 +52,6 @@ namespace Model
         {
             X = Ball.X;
             Y = Ball.Y;
-            System.Diagnostics.Debug.WriteLine("X: {0}, Y: {1}", X, Y);
         }
     }
 }

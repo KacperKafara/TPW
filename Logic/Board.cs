@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data;
-
-namespace Logic
+﻿namespace Logic
 {
     public class Board
     {
@@ -26,7 +19,7 @@ namespace Logic
 
         public void updatePosition()
         {
-            foreach (Ball ball in Balls) 
+            foreach (Ball ball in Balls.ToList())
             {
                 ball.updatePosition(this);
             }
