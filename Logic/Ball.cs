@@ -17,8 +17,19 @@
             Y = y;
             Radius = radius;
             rnd = new Random();
-            HorizontalSpeed = rnd.NextSingle() * Speed - Speed / 2;
-            VerticalSpeed = rnd.NextSingle() * Speed - Speed / 2;
+            HorizontalSpeed = generateRandomSpeed();
+            VerticalSpeed = generateRandomSpeed();
+        }
+
+        public float generateRandomSpeed()
+        {
+            float speed;
+            do
+            {
+                speed = rnd.NextSingle() * Speed - Speed / 2;
+            }
+            while (speed == 0);
+            return speed;
         }
 
         public void updatePosition(Board board)
@@ -30,23 +41,23 @@
             if (X < 0) 
             {
                 X = 0;
-                HorizontalSpeed = rnd.NextSingle() * Speed - Speed / 2;
+                HorizontalSpeed = generateRandomSpeed();
             }
             if (Y < 0) 
             { 
                 Y = 0;
-                VerticalSpeed = rnd.NextSingle() * Speed - Speed / 2;
+                VerticalSpeed = generateRandomSpeed();
             }
 
             if (X + Radius > board.Width) 
             {
                 X = board.Width - Radius;
-                HorizontalSpeed = rnd.NextSingle() * Speed - Speed / 2;
+                HorizontalSpeed = generateRandomSpeed();
             }
             if (Y + Radius > board.Height)
             {
                 Y = board.Height - Radius;
-                VerticalSpeed = rnd.NextSingle() * Speed - Speed / 2;
+                VerticalSpeed = generateRandomSpeed();
             }
         }
     }
