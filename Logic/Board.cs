@@ -19,9 +19,29 @@
 
         public void updatePosition()
         {
-            foreach (Ball ball in Balls.ToList())
+            foreach (Ball ball in Balls)
             {
-                ball.updatePosition(this);
+                if (ball.X < 0)
+                {
+                    ball.X = 0;
+                    ball.HorizontalSpeed = ball.generateRandomSpeed();
+                }
+                if (ball.Y < 0)
+                {
+                    ball.Y = 0;
+                    ball.VerticalSpeed = ball.generateRandomSpeed();
+                }
+
+                if (ball.X + Ball.Radius > Width)
+                {
+                    ball.X = Width - Ball.Radius;
+                    ball.HorizontalSpeed = ball.generateRandomSpeed();
+                }
+                if (ball.Y + Ball.Radius > Height)
+                {
+                    ball.Y = Height - Ball.Radius;
+                    ball.VerticalSpeed = ball.generateRandomSpeed();
+                }
             }
         }
     }

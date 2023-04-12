@@ -5,7 +5,6 @@ namespace Model
 {
     public class BallModel : INotifyPropertyChanged
     {
-        private readonly Ball Ball;
         public String Color { get; set; }
         private float x;
         public float X
@@ -29,12 +28,12 @@ namespace Model
         }
         public float Radious
         {
-            get { return Ball.Radius; }
+            get { return 50; }
         }
 
-        public BallModel(Ball ball, string color = "White")
+
+        public BallModel(string color = "White")
         {
-            Ball = ball;
             Color = color;
         }
         
@@ -46,12 +45,6 @@ namespace Model
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-        }
-
-        public void Update() 
-        {
-            X = Ball.X;
-            Y = Ball.Y;
         }
     }
 }

@@ -6,22 +6,35 @@
         public float Y { get; set; }
         public float HorizontalSpeed { get; set; }
         public float VerticalSpeed { get; set; }
-        public int Radius { get; set; }
+        public const int Radius = 50;
 
         private Random rnd;
         private int Speed = 4;
 
-        public Ball(float x, float y, int radius)
+        private static System.Timers.Timer aTimer;
+
+        public Ball(float x, float y)
         {
             X = x;
             Y = y;
-            Radius = radius;
             rnd = new Random();
             HorizontalSpeed = generateRandomSpeed();
             VerticalSpeed = generateRandomSpeed();
+
+            aTimer = new System.Timers.Timer();
+            aTimer.Interval = 1000 / 30;
+            aTimer.Elapsed += OnUpdate;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
 
-        private float generateRandomSpeed()
+        private void OnUpdate(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            X += HorizontalSpeed;
+            Y += VerticalSpeed;
+        }
+
+        public float generateRandomSpeed()
         {
             float speed;
             do
@@ -34,10 +47,6 @@
 
         public void updatePosition(Board board)
         {
-
-            X += HorizontalSpeed;
-            Y += VerticalSpeed;
-
             if (X < 0) 
             {
                 X = 0;

@@ -4,7 +4,6 @@
     {
         public Board Board { get; set; }
         public abstract void AddBall(Ball ball);
-        public abstract void updatePosition();
         public static LogicApi Instance()
         {
             return new Logic();
@@ -18,11 +17,6 @@
             public override void AddBall(Ball ball)
             {
                 Board.AddBall(ball);
-            }
-
-            public override void updatePosition()
-            {
-                Board.updatePosition();
             }
         }
     }
