@@ -32,9 +32,11 @@ namespace Model
         }
 
 
-        public BallModel(string color = "White")
+        public BallModel(float x, float y, string color = "White")
         {
             Color = color;
+            this.X = x;
+            this.Y = y;
         }
         
         public event PropertyChangedEventHandler PropertyChanged;

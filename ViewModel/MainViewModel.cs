@@ -6,7 +6,7 @@ namespace ViewModel
 {
     public class MainViewModel
     {
-        ModelApi Api { get; set; }
+        private ModelApi Api { get; set; }
         public ObservableCollection<BallModel> Balls { get; set; }
 
         public int NumberOfBalls { get; set; }
@@ -16,7 +16,7 @@ namespace ViewModel
         public MainViewModel() 
         {
             Api = ModelApi.Instance();
-            Balls = Api.balls;
+            Balls = Api.Balls;
             AddCommand = new RelayCommand(AddBalls);
         }
 

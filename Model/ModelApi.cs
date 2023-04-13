@@ -5,8 +5,8 @@ namespace Model
 {
     public abstract class ModelApi
     {
-        public LogicApi logicApi;
-        public ObservableCollection<BallModel> balls;
+        public LogicApi LogicApi;
+        public ObservableCollection<BallModel> Balls;
         public abstract void AddBalls(int number);
         public static ModelApi Instance()
         {
@@ -17,18 +17,17 @@ namespace Model
         {
             public Model() 
             {   
-                balls = new ObservableCollection<BallModel>();
-                logicApi = LogicApi.Instance();
+                Balls = new ObservableCollection<BallModel>();
+                LogicApi = LogicApi.Instance();
             }
 
             public override void AddBalls(int number)
             {
-                Random rnd = new Random();
-                for (int i = 0; i < number; i++)
+                LogicApi.CreateBalls(number);
+                for (int i = 0; i < LogicApi.GetNumberOfBalls(); i++)
                 {
-                    Ball ball = new Ball(rnd.Next(300) + 100, rnd.Next(300) + 100);
-                    logicApi.AddBall(ball);
-                    balls.Add(new BallModel());
+                    BallModel model = new BallModel(LogicApi.GetX(i), LogicApi.GetY(i));
+                    Balls.Add(model);
                 }
             }
         }

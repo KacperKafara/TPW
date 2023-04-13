@@ -1,6 +1,6 @@
 ﻿namespace Logic
 {
-    public class Ball
+    internal class Ball
     {
         private float x;
         private float y;
@@ -31,9 +31,9 @@
             PositionChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public float HorizontalSpeed { get; set; }
-        public float VerticalSpeed { get; set; }
-        public const int Radius = 50;
+        private float HorizontalSpeed { get; set; }
+        private float VerticalSpeed { get; set; }
+        private const int Radius = 50;
 
         private Random rnd;
         private int Speed = 4;
@@ -57,12 +57,33 @@
 
         private void OnUpdate(Object source, System.Timers.ElapsedEventArgs e)
         {
+            if (X < 0)
+            {
+                X = 0;
+                HorizontalSpeed = generateRandomSpeed();
+            }
+            if (Y < 0)
+            {
+                Y = 0;
+                VerticalSpeed = generateRandomSpeed();
+            }
+
+            if (X + Ball.Radius > 500)
+            {
+                X = 500 - Ball.Radius;
+                HorizontalSpeed = generateRandomSpeed();
+            }
+            if (Y + Ball.Radius > 500)
+            {
+                Y = 500 - Ball.Radius;
+                VerticalSpeed = generateRandomSpeed();
+            }
             X += HorizontalSpeed;
             Y += VerticalSpeed;
             System.Diagnostics.Debug.WriteLine("X: {0}, Y: {1}", X, Y);
         }
 
-        public float generateRandomSpeed()
+        private float generateRandomSpeed()
         {
             float speed;
             do
