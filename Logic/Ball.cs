@@ -2,8 +2,35 @@
 {
     public class Ball
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        private float x;
+        private float y;
+
+        public float X
+        {
+            get { return x; }
+            set
+            {
+                x = value;
+                OnPositionChanged();
+            }
+        }
+        public float Y
+        {
+            get { return y; }
+            set
+            {
+                y = value;
+                OnPositionChanged();
+            }
+        }
+
+        public event EventHandler PositionChanged;
+
+        protected virtual void OnPositionChanged()
+        {
+            PositionChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public float HorizontalSpeed { get; set; }
         public float VerticalSpeed { get; set; }
         public const int Radius = 50;
@@ -32,6 +59,7 @@
         {
             X += HorizontalSpeed;
             Y += VerticalSpeed;
+            System.Diagnostics.Debug.WriteLine("X: {0}, Y: {1}", X, Y);
         }
 
         public float generateRandomSpeed()
@@ -43,31 +71,6 @@
             }
             while (speed == 0);
             return speed * 2;
-        }
-
-        public void updatePosition(Board board)
-        {
-            if (X < 0) 
-            {
-                X = 0;
-                HorizontalSpeed = generateRandomSpeed();
-            }
-            if (Y < 0) 
-            { 
-                Y = 0;
-                VerticalSpeed = generateRandomSpeed();
-            }
-
-            if (X + Radius > board.Width) 
-            {
-                X = board.Width - Radius;
-                HorizontalSpeed = generateRandomSpeed();
-            }
-            if (Y + Radius > board.Height)
-            {
-                Y = board.Height - Radius;
-                VerticalSpeed = generateRandomSpeed();
-            }
         }
     }
 }
