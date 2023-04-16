@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Logic;
+using static Logic.LogicApi;
 
 namespace Model
 {
@@ -19,6 +20,7 @@ namespace Model
             {   
                 Balls = new ObservableCollection<BallModel>();
                 LogicApi = LogicApi.Instance();
+                LogicApi.LogicApiEvent += LogicApiEventHandler;
             }
 
             public override void AddBalls(int number)
@@ -28,6 +30,15 @@ namespace Model
                 {
                     BallModel model = new BallModel(LogicApi.GetX(i), LogicApi.GetY(i));
                     Balls.Add(model);
+                }
+            }
+
+            private void LogicApiEventHandler(float x, float y)
+            {
+                foreach (BallModel ballModel in Balls) 
+                {
+                    ballModel.X = x;
+                    ballModel.Y = y;
                 }
             }
         }
