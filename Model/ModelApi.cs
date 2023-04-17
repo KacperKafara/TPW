@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using Logic;
-using static Logic.LogicApi;
 
 namespace Model
 {
@@ -33,13 +32,14 @@ namespace Model
                 }
             }
 
-            private void LogicApiEventHandler(float x, float y)
+            private void LogicApiEventHandler(int Id)
             {
-                foreach (BallModel ballModel in Balls) 
+                if (Balls.Count == LogicApi.GetNumberOfBalls()) 
                 {
-                    ballModel.X = x;
-                    ballModel.Y = y;
+                    Balls[Id].X = LogicApi.GetX(Id);
+                    Balls[Id].Y = LogicApi.GetY(Id);
                 }
+                
             }
         }
     }

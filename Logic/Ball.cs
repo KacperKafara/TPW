@@ -24,6 +24,8 @@
             }
         }
 
+        public int Id { get; }
+
         public event EventHandler PositionChanged;
 
         protected virtual void OnPositionChanged()
@@ -40,10 +42,11 @@
 
         private static System.Timers.Timer aTimer;
 
-        public Ball(float x, float y)
+        public Ball(float x, float y, int id)
         {
             X = x;
             Y = y;
+            Id = id;
             rnd = new Random();
             HorizontalSpeed = generateRandomSpeed();
             VerticalSpeed = generateRandomSpeed();
@@ -59,7 +62,6 @@
         {
             X += HorizontalSpeed;
             Y += VerticalSpeed;
-            System.Diagnostics.Debug.WriteLine("X: {0}, Y: {1}", X, Y);
         }
 
         public float generateRandomSpeed()

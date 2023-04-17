@@ -7,8 +7,8 @@
         public abstract int GetNumberOfBalls();
         public abstract float GetX(int number);
         public abstract float GetY(int number);
-        public delegate void LogicApiEventHandler(float x, float y);
-        public event LogicApiEventHandler LogicApiEvent;
+        public delegate void LogicApiEventHandler(int Id);
+        public abstract event LogicApiEventHandler LogicApiEvent;
         public static LogicApi Instance()
         {
             return new Logic();
@@ -20,12 +20,14 @@
             {
                 Balls = new List<Ball>();
             }
+            public override event LogicApiEventHandler LogicApiEvent;
+
             public override void CreateBalls(int number)
             {
                 Random rnd = new Random();
                 for (int i = 0; i < number; i++)
                 {
-                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300));
+                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), GetNumberOfBalls());
                     Balls.Add(ball);
                     ball.PositionChanged += Ball_PositionChanged;
                 }
@@ -49,7 +51,7 @@
                 if (ball != null)
                 {
                     updatePosition(ball);
-                    LogicApiEvent?.Invoke(ball.X, ball.Y);
+                    LogicApiEvent?.Invoke(ball.Id);
                 }
             }
 
