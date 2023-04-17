@@ -13,7 +13,7 @@ namespace Model
             set
             {
                 x = value;
-                OnPropertyChanged("X");
+                OnPropertyChanged(nameof(X));
             }
         }
         private float y;
@@ -23,7 +23,7 @@ namespace Model
             set
             {
                 y = value;
-                OnPropertyChanged("Y");
+                OnPropertyChanged(nameof(Y));
             }
         }
         public float Radious
@@ -35,8 +35,8 @@ namespace Model
         public BallModel(float x, float y, string color = "White")
         {
             Color = color;
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
