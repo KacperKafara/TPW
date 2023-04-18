@@ -5,7 +5,7 @@
         private float x;
         private float y;
 
-        public float X
+        internal float X
         {
             get { return x; }
             set
@@ -14,7 +14,7 @@
                 OnPositionChanged();
             }
         }
-        public float Y
+        internal float Y
         {
             get { return y; }
             set
@@ -24,23 +24,23 @@
             }
         }
 
-        public event EventHandler PositionChanged;
+        internal event EventHandler PositionChanged;
 
-        protected virtual void OnPositionChanged()
+        internal void OnPositionChanged()
         {
             PositionChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public float HorizontalSpeed { private get; set; }
-        public float VerticalSpeed { private get; set; }
-        public const int Radius = 50;
+        internal float HorizontalSpeed { private get; set; }
+        internal float VerticalSpeed { private get; set; }
+        internal const int Radius = 50;
 
         private Random rnd;
         private int Speed = 4;
 
         private static System.Timers.Timer aTimer;
 
-        public Ball(float x, float y)
+        internal Ball(float x, float y)
         {
             X = x;
             Y = y;
@@ -61,7 +61,7 @@
             Y += VerticalSpeed;
         }
 
-        public float generateRandomSpeed()
+        internal float generateRandomSpeed()
         {
             float speed;
             do

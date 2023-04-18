@@ -11,7 +11,7 @@ namespace ViewModel
         public int NumberOfBalls { get; set; }
         public ICommand AddCommand { get; set; }
 
-        public MainViewModel() 
+        public MainViewModel()
         {
             Api = ModelApi.Instance();
             Balls = Api.Balls;

@@ -25,7 +25,7 @@ namespace Model
             public override void AddBalls(int number)
             {
                 LogicApi.CreateBalls(number);
-                for (int i = 0; i < LogicApi.GetNumberOfBalls(); i++)
+                for (int i = 0; i < number; i++)
                 {
                     BallModel model = new BallModel(LogicApi.GetX(i), LogicApi.GetY(i));
                     Balls.Add(model);
@@ -36,8 +36,11 @@ namespace Model
             {
                 for (int i = 0; i < LogicApi.GetNumberOfBalls(); i++)
                 {
-                    Balls[i].X = LogicApi.GetX(i);
-                    Balls[i].Y = LogicApi.GetY(i);
+                    if (LogicApi.GetNumberOfBalls() == Balls.Count)
+                    {
+                        Balls[i].X = LogicApi.GetX(i);
+                        Balls[i].Y = LogicApi.GetY(i);
+                    }
                 }
             }
         }

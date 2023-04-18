@@ -1,5 +1,5 @@
-﻿using Logic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Model
 {
@@ -13,7 +13,7 @@ namespace Model
             set
             {
                 x = value;
-                OnPropertyChanged(nameof(X));
+                RaisePropertyChanged();
             }
         }
         private float y;
@@ -23,7 +23,7 @@ namespace Model
             set
             {
                 y = value;
-                OnPropertyChanged(nameof(Y));
+                RaisePropertyChanged();
             }
         }
         public float Radious
@@ -41,12 +41,9 @@ namespace Model
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string propertyName)
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
