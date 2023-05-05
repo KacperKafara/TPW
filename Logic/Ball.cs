@@ -31,8 +31,8 @@
             PositionChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        internal float HorizontalSpeed { private get; set; }
-        internal float VerticalSpeed { private get; set; }
+        internal float HorizontalSpeed { get; set; }
+        internal float VerticalSpeed { get; set; }
         internal const int Radius = 50;
 
         private Random rnd;
@@ -70,6 +70,26 @@
             }
             while (speed == 0);
             return speed * 2;
+        }
+
+        public async Task CheckCollisionWith(Ball other)
+        {
+            float dx = X - other.X;
+            float dy = Y - other.Y;
+            float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+
+            if (distance < Radius)
+            {
+                float temp = HorizontalSpeed;
+                HorizontalSpeed = other.HorizontalSpeed;
+                other.HorizontalSpeed = temp;
+
+                temp = VerticalSpeed;
+                VerticalSpeed = other.VerticalSpeed;
+                other.VerticalSpeed = temp;
+
+                await Task.Delay(100);
+            }
         }
     }
 }

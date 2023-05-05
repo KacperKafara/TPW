@@ -59,24 +59,37 @@
                 if (ball.X < 0)
                 {
                     ball.X = 0;
-                    ball.HorizontalSpeed = ball.generateRandomSpeed();
+                    ball.HorizontalSpeed *= -1;
                 }
                 if (ball.Y < 0)
                 {
                     ball.Y = 0;
-                    ball.VerticalSpeed = ball.generateRandomSpeed();
+                    ball.VerticalSpeed *= -1;
                 }
 
                 if (ball.X + Ball.Radius > 500)
                 {
                     ball.X = 500 - Ball.Radius;
-                    ball.HorizontalSpeed = ball.generateRandomSpeed();
+                    ball.HorizontalSpeed *= -1;
                 }
                 if (ball.Y + Ball.Radius > 500)
                 {
                     ball.Y = 500 - Ball.Radius;
-                    ball.VerticalSpeed = ball.generateRandomSpeed();
+                    ball.VerticalSpeed *= -1;
                 }
+
+                Task.Run(async () =>
+                {
+                    Task[] collisionTasks = new Task[Balls.Count];
+                    int taskIndex = 0;
+                    for (int i = 0; i < Balls.Count; i++)
+                    {
+                        collisionTasks[taskIndex] = ball.CheckCollisionWith(Balls[i]);
+                        taskIndex++;
+                    }
+
+                    await Task.Delay(50);
+                });
             }
         }
     }
