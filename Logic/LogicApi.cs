@@ -1,12 +1,13 @@
-﻿namespace Logic
+﻿using Data;
+
+namespace Logic
 {
     public abstract class LogicApi
     {
-        internal abstract List<Ball> Balls { get; }
         public abstract void CreateBalls(int number);
         public abstract int GetNumberOfBalls();
-        public abstract float GetX(int number);
-        public abstract float GetY(int number);
+        public abstract double GetX(int number);
+        public abstract double GetY(int number);
         public abstract event EventHandler LogicApiEvent;
         public static LogicApi Instance()
         {
@@ -14,82 +15,59 @@
         }
         private class Logic : LogicApi
         {
-            internal override List<Ball> Balls { get; }
+            DataApi dataApi;
             public Logic()
             {
-                Balls = new List<Ball>();
+                dataApi = DataApi.Instance();
+                dataApi.BallEvent += Ball_PositionChanged;
             }
             public override event EventHandler LogicApiEvent;
 
             public override void CreateBalls(int number)
             {
-                Random rnd = new Random();
-                for (int i = 0; i < number; i++)
-                {
-                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300));
-                    Balls.Add(ball);
-                    ball.PositionChanged += Ball_PositionChanged;
-                }
+                dataApi.CreateBalls(number);
             }
             public override int GetNumberOfBalls()
             {
-                return Balls.Count;
+                return dataApi.GetNumberOfBalls();
             }
-            public override float GetX(int number)
+            public override double GetX(int number)
             {
-                return Balls[number].X;
+                return dataApi.GetX(number);
             }
-            public override float GetY(int number)
+            public override double GetY(int number)
             {
-                return Balls[number].Y;
+                return dataApi.GetY(number);
             }
 
             private void Ball_PositionChanged(object sender, EventArgs e)
             {
-                Ball ball = sender as Ball;
-                if (ball != null)
-                {
-                    updatePosition(ball);
-                    LogicApiEvent?.Invoke(ball, EventArgs.Empty);
-                }
+                CheckColisionWithWalls();
+                LogicApiEvent?.Invoke(this, EventArgs.Empty);
             }
 
-            private void updatePosition(Ball ball)
+            private void CheckColisionWithWalls()
             {
-                if (ball.X < 0)
+                for (int i = 0; i < dataApi.GetNumberOfBalls(); i++)
                 {
-                    ball.X = 0;
-                    ball.HorizontalSpeed *= -1;
-                }
-                if (ball.Y < 0)
-                {
-                    ball.Y = 0;
-                    ball.VerticalSpeed *= -1;
-                }
-
-                if (ball.X + Ball.Radius > 500)
-                {
-                    ball.X = 500 - Ball.Radius;
-                    ball.HorizontalSpeed *= -1;
-                }
-                if (ball.Y + Ball.Radius > 500)
-                {
-                    ball.Y = 500 - Ball.Radius;
-                    ball.VerticalSpeed *= -1;
-                }
-
-                Task.Run(async () =>
-                {
-                    Task[] collisionTasks = new Task[Balls.Count];
-                    int taskIndex = 0;
-                    for (int i = 0; i < Balls.Count; i++)
+                    if (dataApi.GetX(i) < 0)
                     {
-                        collisionTasks[taskIndex] = ball.CheckCollisionWith(Balls[i]);
-                        taskIndex++;
+                        dataApi.SetHorizontalMove(i);
+                    }
+                    if (dataApi.GetY(i) < 0)
+                    {
+                        dataApi.SetVerticalMove(i);
                     }
 
-                    await Task.Delay(50);
-                });
+                    if (dataApi.GetX(i) + 50 > 500)
+                    {
+                        dataApi.SetHorizontalMove(i);
+                    }
+                    if (dataApi.GetY(i) + 50 > 500)
+                    {
+                        dataApi.SetVerticalMove(i);
+                    }
+                }
             }
         }
     }

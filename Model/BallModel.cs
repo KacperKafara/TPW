@@ -6,8 +6,8 @@ namespace Model
     public class BallModel : INotifyPropertyChanged
     {
         public String Color { get; set; }
-        private float x;
-        public float X
+        private double x;
+        public double X
         {
             get { return x; }
             set
@@ -16,8 +16,8 @@ namespace Model
                 RaisePropertyChanged();
             }
         }
-        private float y;
-        public float Y
+        private double y;
+        public double Y
         {
             get { return y; }
             set
@@ -26,13 +26,13 @@ namespace Model
                 RaisePropertyChanged();
             }
         }
-        public float Radious
+        public double Radious
         {
             get { return 50; }
         }
 
 
-        public BallModel(float x, float y, string color = "White")
+        public BallModel(double x, double y, string color = "White")
         {
             Color = color;
             X = x;
