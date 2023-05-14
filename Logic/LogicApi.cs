@@ -7,16 +7,8 @@ namespace Logic
     {
         public abstract void CreateBalls(int number);
         public abstract int GetNumberOfBalls();
-        public abstract double GetX(IBall number);
-        public abstract double GetY(IBall number);
-        public abstract double GetWeight(IBall number);
-        public abstract double GetHorizontalSpeed(IBall number);
-        public abstract double GetVerticalSpeed(IBall number);
         public abstract double GetX(int number);
         public abstract double GetY(int number);
-        public abstract double GetWeight(int number);
-        public abstract double GetHorizontalSpeed(int number);
-        public abstract double GetVerticalSpeed(int number);
         public abstract event EventHandler LogicApiEvent;
         public static LogicApi Instance()
         {
@@ -25,6 +17,7 @@ namespace Logic
         private class Logic : LogicApi
         {
             DataApi dataApi;
+            object _lock = new object();
             public Logic()
             {
                 dataApi = DataApi.Instance();
@@ -40,27 +33,6 @@ namespace Logic
             {
                 return dataApi.GetNumberOfBalls();
             }
-            public override double GetX(IBall ball)
-            {
-                return dataApi.GetX(ball);
-            }
-            public override double GetY(IBall ball)
-            {
-                return dataApi.GetY(ball);
-            }
-            public override double GetWeight(IBall ball)
-            {
-                return dataApi.GetWeight(ball);
-            }
-            public override double GetHorizontalSpeed(IBall ball)
-            {
-                return dataApi.GetHorizontalSpeed(ball);
-            }
-            public override double GetVerticalSpeed(IBall ball)
-            {
-                return dataApi.GetVerticalSpeed(ball);
-            }
-
             public override double GetX(int number)
             {
                 return dataApi.GetX(number);
@@ -68,20 +40,6 @@ namespace Logic
             public override double GetY(int number)
             {
                 return dataApi.GetY(number);
-            }
-
-            public override double GetWeight(int number)
-            {
-                return dataApi.GetWeight(number);
-            }
-
-            public override double GetHorizontalSpeed(int number)
-            {
-                return dataApi.GetHorizontalSpeed(number);
-            }
-            public override double GetVerticalSpeed(int number)
-            {
-                return dataApi.GetVerticalSpeed(number);
             }
 
             private void Ball_PositionChanged(object sender, EventArgs e)
@@ -96,45 +54,53 @@ namespace Logic
 
             private void CheckCollisionWithWalls(IBall ball)
             {
-                if (dataApi.GetX(ball) < 0)
+                if (ball.X < 0)
                 {
-                    dataApi.ReverseHorizontalMove(ball);
+                    ball.HorizontalMove *= -1;
                 }
-                if (dataApi.GetY(ball) < 0)
+                if (ball.Y < 0)
                 {
-                    dataApi.ReverseVerticalMove(ball);
+                    ball.VerticalMove *= -1;
                 }
 
-                if (dataApi.GetX(ball) + IBall.Radius > 500)
+                if (ball.X + IBall.Radius > dataApi.Width)
                 {
-                    dataApi.ReverseHorizontalMove(ball);
+                    ball.HorizontalMove *= -1;
                 }
-                if (dataApi.GetY(ball) + IBall.Radius > 500)
+                if (ball.Y + IBall.Radius > dataApi.Height)
                 {
-                    dataApi.ReverseVerticalMove(ball);
+                    ball.VerticalMove *= -1;
                 }
             }
 
             private void CheckCollisionWithBalls(IBall ball)
             {
-                for (int i = 0; i < GetNumberOfBalls(); i++)
+                lock(_lock)
                 {
-                    if (GetX(ball) != GetX(i) && GetY(ball) != GetY(i))
+                    for (int i = 0; i < dataApi.GetNumberOfBalls(); i++)
                     {
-                        double d = Math.Sqrt(Math.Pow(GetX(i) - GetX(ball), 2) + Math.Pow(GetY(i) - GetY(ball), 2));
-                        if (d - (IBall.Radius) <= 0)
+                        IBall secondBall = dataApi.GetBall(i);
+                        if (secondBall != ball)
                         {
-                            double hv1 = ((GetHorizontalSpeed(ball) * (GetWeight(ball) - GetWeight(i)) + 2 * GetWeight(i) * GetHorizontalSpeed(i)) / (GetWeight(ball) + GetWeight(i)));
-                            double vv1 = ((GetVerticalSpeed(ball) * (GetWeight(ball) - GetWeight(i)) + 2 * GetWeight(i) * GetVerticalSpeed(i)) / (GetWeight(ball) + GetWeight(i)));
+                            double d = Math.Sqrt(Math.Pow(ball.X - secondBall.X, 2) + Math.Pow(ball.Y - secondBall.Y, 2));
+                            if (d - (IBall.Radius) <= 0)
+                            {
+                                double hv1 = ((ball.Weight - secondBall.Weight) / (ball.Weight + secondBall.Weight)) * ball.HorizontalSpeed
+                                    + (2 * secondBall.Weight / (ball.Weight + secondBall.Weight)) * secondBall.HorizontalSpeed;
+                                double vv1 = ((ball.Weight - secondBall.Weight) / (ball.Weight + secondBall.Weight)) * ball.VerticalSpeed
+                                    + (2 * secondBall.Weight / (ball.Weight + secondBall.Weight)) * secondBall.VerticalSpeed;
 
-                            double hv2 = ((GetHorizontalSpeed(i) * (GetWeight(i) - GetWeight(ball)) + 2 * GetWeight(ball) * GetHorizontalSpeed(ball)) / (GetWeight(i) + GetWeight(ball)));
-                            double vv2 = ((GetVerticalSpeed(i) * (GetWeight(i) - GetWeight(ball)) + 2 * GetWeight(ball) * GetVerticalSpeed(ball)) / (GetWeight(i) + GetWeight(ball)));
+                                double hv2 = (2 * ball.Weight / (ball.Weight + secondBall.Weight)) * ball.HorizontalSpeed
+                                    + ((secondBall.Weight - ball.Weight) / (ball.Weight + secondBall.Weight)) * secondBall.HorizontalSpeed;
+                                double vv2 = (2 * ball.Weight / (ball.Weight + secondBall.Weight)) * ball.VerticalSpeed
+                                    + ((secondBall.Weight - ball.Weight) / (ball.Weight + secondBall.Weight)) * secondBall.VerticalSpeed;
 
-                            dataApi.SetHorizontalMove(ball, hv1);
-                            dataApi.SetVerticalMove(ball, vv1);
+                                ball.HorizontalSpeed = hv1;
+                                ball.VerticalSpeed = vv1;
 
-                            dataApi.SetHorizontalMove(i, hv2);
-                            dataApi.SetVerticalMove(i, vv2);
+                                secondBall.HorizontalSpeed = hv2;
+                                secondBall.VerticalSpeed = vv2;
+                            }
                         }
                     }
                 }

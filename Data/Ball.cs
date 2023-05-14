@@ -4,8 +4,8 @@ namespace Data
 {
     public interface IBall
     {
-        double X { get; set; }
-        double Y { get; set; }
+        double X { get; }
+        double Y { get; }
         double HorizontalMove { get; set; }
         double VerticalMove { get; set;}
         int MoveTime { get; set;}
@@ -14,6 +14,7 @@ namespace Data
         double HorizontalSpeed { get; set; }
         double VerticalSpeed { get; set; }
         void Move();
+        void RunTask();
     }
 
     internal class Ball : IBall
@@ -38,14 +39,6 @@ namespace Data
             MoveTime = 1000/60;
             HorizontalSpeed = HorizontalMove / MoveTime;
             VerticalSpeed = HorizontalMove / MoveTime;
-            Task.Run(async () =>
-            {
-                while (true)
-                {
-                    Move();
-                    await Task.Delay(MoveTime);
-                }
-            });
         }
 
         internal event EventHandler PositionChanged;
@@ -107,6 +100,7 @@ namespace Data
             set
             {
                 _horizontalSpeed = value;
+                HorizontalMove = value * MoveTime;
             }
         }
         public double VerticalSpeed 
@@ -115,6 +109,7 @@ namespace Data
             set
             {
                 _verticalSpeed = value;
+                VerticalMove = value * MoveTime;
             }
         }
 
@@ -123,6 +118,17 @@ namespace Data
             X += HorizontalMove;
             Y += VerticalMove;
             OnPositionChanged();
+        }
+        public void RunTask()
+        {
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    Move();
+                    await Task.Delay(MoveTime);
+                }
+            });
         }
     }
 }
