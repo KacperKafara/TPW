@@ -34,13 +34,10 @@
                 Random rnd = new Random();
                 for (int i = 0; i < number; i++)
                 {
-                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), 10);
+                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), rnd.Next(7, 12));
                     Balls.Add(ball);
                     ball.PositionChanged += Ball_PositionChanged;
-                }
-                for (int i = 0; i < number; i++)
-                {
-                    Balls[i].RunTask();
+                    ball.RunTask();
                 }
             }
             public override int GetNumberOfBalls()
@@ -57,11 +54,11 @@
             }
             public override double GetX(int number)
             {
-                return Balls[number].X;
+                return Balls[number].Position.X;
             }
             public override double GetY(int number)
             {
-                return Balls[number].Y;
+                return Balls[number].Position.Y;
             }
             public override IBall GetBall(int number)
             {

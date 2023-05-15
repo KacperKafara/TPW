@@ -1,5 +1,6 @@
 ﻿using Data;
 using System.Runtime.Intrinsics;
+using System.Numerics;
 
 namespace Logic
 {
@@ -54,23 +55,25 @@ namespace Logic
 
             private void CheckCollisionWithWalls(IBall ball)
             {
-                if (ball.X < 0)
+                Vector2 newSpeed = new Vector2(ball.Speed.X, ball.Speed.Y);
+                if (ball.Position.X < 0)
                 {
-                    ball.HorizontalSpeed *= -1;
+                    newSpeed.X = ball.Speed.X * -1;
                 }
-                if (ball.Y < 0)
+                if (ball.Position.Y < 0)
                 {
-                    ball.VerticalSpeed *= -1;
+                    newSpeed.Y = ball.Speed.Y * -1;
                 }
 
-                if (ball.X + IBall.Radius > dataApi.Width)
+                if (ball.Position.X + IBall.Radius > dataApi.Width)
                 {
-                    ball.HorizontalSpeed *= -1;
+                    newSpeed.X = ball.Speed.X * -1;
                 }
-                if (ball.Y + IBall.Radius > dataApi.Height)
+                if (ball.Position.Y + IBall.Radius > dataApi.Height)
                 {
-                    ball.VerticalSpeed *= -1;
+                    newSpeed.Y = ball.Speed.Y * -1;
                 }
+                ball.Speed = newSpeed;
             }
 
             private void CheckCollisionWithBalls(IBall ball)
@@ -82,24 +85,31 @@ namespace Logic
                         IBall secondBall = dataApi.GetBall(i);
                         if (secondBall != ball)
                         {
-                            double d = Math.Sqrt(Math.Pow(ball.X - secondBall.X, 2) + Math.Pow(ball.Y - secondBall.Y, 2));
+                            double d = Vector2.Distance(ball.Position, secondBall.Position);
                             if (d - (IBall.Radius) <= 0)
                             {
-                                double hv1 = (ball.HorizontalSpeed * (ball.Weight - secondBall.Weight) + 2 * secondBall.Weight * secondBall.HorizontalSpeed) / (ball.Weight + secondBall.Weight);
-                                double vv1 = (ball.VerticalSpeed * (ball.Weight - secondBall.Weight) + 2 * secondBall.Weight * secondBall.VerticalSpeed) / (ball.Weight + secondBall.Weight);
-
-                                double hv2 = (secondBall.HorizontalSpeed * (secondBall.Weight - ball.Weight) + 2 * ball.Weight * ball.HorizontalSpeed) / (secondBall.Weight + ball.Weight);
-                                double vv2 = (secondBall.VerticalSpeed * (secondBall.Weight - ball.Weight) + 2 * ball.Weight * ball.VerticalSpeed) / (secondBall.Weight + ball.Weight);
-
-                                ball.HorizontalSpeed = hv1;
-                                ball.VerticalSpeed = vv1;
-
-                                secondBall.HorizontalSpeed = hv2;
-                                secondBall.VerticalSpeed = vv2;
+                                Vector2 firstSpeed = CountNewSpeed(ball, secondBall);
+                                Vector2 secondSpeed = CountNewSpeed(secondBall, ball);
+                                if (Vector2.Distance(ball.Position, secondBall.Position) > 
+                                    Vector2.Distance(ball.Position + firstSpeed * 1000/60, secondBall.Position + secondSpeed * 1000 / 60))
+                                {
+                                    return;
+                                }
+                                ball.Speed = firstSpeed;
+                                secondBall.Speed = secondSpeed;
                             }
                         }
                     }
                 }
+            }
+
+            private Vector2 CountNewSpeed(IBall ball, IBall secondBall) 
+            {
+                return ball.Speed -
+                       (2 * secondBall.Weight / (ball.Weight + secondBall.Weight) 
+                       * (Vector2.Dot(ball.Speed - secondBall.Speed, ball.Position - secondBall.Position)
+                       * (ball.Position - secondBall.Position))
+                       / (float)Math.Pow(Vector2.Distance(secondBall.Position, ball.Position), 2));
             }
         }
     }
