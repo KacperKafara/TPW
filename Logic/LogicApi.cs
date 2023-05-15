@@ -1,5 +1,4 @@
 ﻿using Data;
-using System.Runtime.Intrinsics;
 using System.Numerics;
 
 namespace Logic
@@ -11,17 +10,24 @@ namespace Logic
         public abstract double GetX(int number);
         public abstract double GetY(int number);
         public abstract event EventHandler LogicApiEvent;
-        public static LogicApi Instance()
+        public static LogicApi Instance(DataApi dataApi)
         {
-            return new Logic();
+            if (dataApi == null)
+            {
+                return new Logic(DataApi.Instance());
+            }
+            else
+            {
+                return new Logic(dataApi);
+            }
         }
         private class Logic : LogicApi
         {
             DataApi dataApi;
             object _lock = new object();
-            public Logic()
+            public Logic(DataApi api)
             {
-                dataApi = DataApi.Instance();
+                dataApi = api;
                 dataApi.BallEvent += Ball_PositionChanged;
             }
             public override event EventHandler LogicApiEvent;
