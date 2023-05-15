@@ -56,20 +56,20 @@ namespace Logic
             {
                 if (ball.X < 0)
                 {
-                    ball.HorizontalMove *= -1;
+                    ball.HorizontalSpeed *= -1;
                 }
                 if (ball.Y < 0)
                 {
-                    ball.VerticalMove *= -1;
+                    ball.VerticalSpeed *= -1;
                 }
 
                 if (ball.X + IBall.Radius > dataApi.Width)
                 {
-                    ball.HorizontalMove *= -1;
+                    ball.HorizontalSpeed *= -1;
                 }
                 if (ball.Y + IBall.Radius > dataApi.Height)
                 {
-                    ball.VerticalMove *= -1;
+                    ball.VerticalSpeed *= -1;
                 }
             }
 
@@ -85,15 +85,11 @@ namespace Logic
                             double d = Math.Sqrt(Math.Pow(ball.X - secondBall.X, 2) + Math.Pow(ball.Y - secondBall.Y, 2));
                             if (d - (IBall.Radius) <= 0)
                             {
-                                double hv1 = ((ball.Weight - secondBall.Weight) / (ball.Weight + secondBall.Weight)) * ball.HorizontalSpeed
-                                    + (2 * secondBall.Weight / (ball.Weight + secondBall.Weight)) * secondBall.HorizontalSpeed;
-                                double vv1 = ((ball.Weight - secondBall.Weight) / (ball.Weight + secondBall.Weight)) * ball.VerticalSpeed
-                                    + (2 * secondBall.Weight / (ball.Weight + secondBall.Weight)) * secondBall.VerticalSpeed;
+                                double hv1 = (ball.HorizontalSpeed * (ball.Weight - secondBall.Weight) + 2 * secondBall.Weight * secondBall.HorizontalSpeed) / (ball.Weight + secondBall.Weight);
+                                double vv1 = (ball.VerticalSpeed * (ball.Weight - secondBall.Weight) + 2 * secondBall.Weight * secondBall.VerticalSpeed) / (ball.Weight + secondBall.Weight);
 
-                                double hv2 = (2 * ball.Weight / (ball.Weight + secondBall.Weight)) * ball.HorizontalSpeed
-                                    + ((secondBall.Weight - ball.Weight) / (ball.Weight + secondBall.Weight)) * secondBall.HorizontalSpeed;
-                                double vv2 = (2 * ball.Weight / (ball.Weight + secondBall.Weight)) * ball.VerticalSpeed
-                                    + ((secondBall.Weight - ball.Weight) / (ball.Weight + secondBall.Weight)) * secondBall.VerticalSpeed;
+                                double hv2 = (secondBall.HorizontalSpeed * (secondBall.Weight - ball.Weight) + 2 * ball.Weight * ball.HorizontalSpeed) / (secondBall.Weight + ball.Weight);
+                                double vv2 = (secondBall.VerticalSpeed * (secondBall.Weight - ball.Weight) + 2 * ball.Weight * ball.VerticalSpeed) / (secondBall.Weight + ball.Weight);
 
                                 ball.HorizontalSpeed = hv1;
                                 ball.VerticalSpeed = vv1;

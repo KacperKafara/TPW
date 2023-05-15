@@ -34,7 +34,7 @@
                 Random rnd = new Random();
                 for (int i = 0; i < number; i++)
                 {
-                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), 100);
+                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), 10);
                     Balls.Add(ball);
                     ball.PositionChanged += Ball_PositionChanged;
                 }
