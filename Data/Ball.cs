@@ -34,6 +34,7 @@ namespace Data
                 Y = y
             };
             MoveTime = 1000/60;
+            RunTask();
         }
 
         internal event EventHandler PositionChanged;
@@ -46,7 +47,7 @@ namespace Data
         public int MoveTime
         {
             get => _moveTime;
-            set
+            private set
             {
                 _moveTime = value;
             }
@@ -72,7 +73,7 @@ namespace Data
             Position += Speed * MoveTime;
             OnPositionChanged();
         }
-        public void RunTask()
+        private void RunTask()
         {
             Task.Run(async () =>
             {

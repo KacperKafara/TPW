@@ -73,13 +73,14 @@ namespace LogicTest
                 }
                 Counter++;
                 MoveTime = 1000 / 60;
+                RunTask();
             }
             public void Move()
             {
                 Position += Speed * MoveTime;
                 OnPositionChanged();
             }
-            public void RunTask()
+            private void RunTask()
             {
                 Task.Run(async () =>
                 {
@@ -116,7 +117,6 @@ namespace LogicTest
                     Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), rnd.Next(7, 12));
                     Balls.Add(ball);
                     ball.PositionChanged += Ball_PositionChanged;
-                    ball.RunTask();
                 }
             }
             public override int GetNumberOfBalls()

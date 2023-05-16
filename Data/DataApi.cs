@@ -37,7 +37,6 @@
                     Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), rnd.Next(7, 12));
                     Balls.Add(ball);
                     ball.PositionChanged += Ball_PositionChanged;
-                    ball.RunTask();
                 }
             }
             public override int GetNumberOfBalls()
