@@ -61,7 +61,7 @@ namespace Logic
 
             private void CheckCollisionWithWalls(IBall ball)
             {
-                Vector2 newSpeed = new Vector2(ball.Speed.X, ball.Speed.Y);
+                Vector2 newSpeed = ball.Speed;
                 if (ball.Position.X < 0)
                 {
                     newSpeed.X = ball.Speed.X * -1;

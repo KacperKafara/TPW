@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace Data
@@ -18,9 +19,11 @@ namespace Data
         private float _weight;
         private Vector2 _speed;
         private Vector2 _position;
+        private Stopwatch _stopwatch;
 
         public Ball(int x, int y, float weight)
         {
+            _stopwatch = new Stopwatch();
             _weight = weight;
             Random rnd = new Random();
             Speed = new Vector2(x, y)
@@ -77,10 +80,22 @@ namespace Data
         {
             Task.Run(async () =>
             {
+                int delay = 0;
                 while (true)
                 {
+                    _stopwatch.Restart();
+                    _stopwatch.Start();
                     Move();
-                    await Task.Delay(MoveTime);
+                    _stopwatch.Stop();
+                    if (MoveTime - _stopwatch.ElapsedMilliseconds < 0)
+                    {
+                        delay = 0;
+                    }
+                    else
+                    {
+                        delay = MoveTime - (int)_stopwatch.ElapsedMilliseconds;
+                    }
+                    await Task.Delay(delay);
                 }
             });
         }
