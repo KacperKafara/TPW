@@ -9,6 +9,7 @@ namespace LogicTest
     {
         private class Ball : IBall
         {
+            public int ID { get; }
             public static int Counter = 0;
             private int _moveTime;
             private float _weight;

@@ -19,6 +19,7 @@
 
         private class Data : DataApi
         {
+            private Logger _logger;
             private List<IBall> Balls { get; }
             public override int Width { get; }
             public override int Height { get; }
@@ -28,13 +29,15 @@
                 Balls = new List<IBall>();
                 Width = 500;
                 Height = 500;
+                _logger = new Logger();
             }
             public override void CreateBalls(int number)
             {
                 Random rnd = new Random();
+                int a = Balls.Count;
                 for (int i = 0; i < number; i++)
                 {
-                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), 10);
+                    Ball ball = new Ball(rnd.Next(100, 300), rnd.Next(100, 300), 10, i + a);
                     Balls.Add(ball);
                     ball.PositionChanged += Ball_PositionChanged;
                 }
@@ -49,6 +52,7 @@
                 if (sender != null)
                 {
                     BallEvent?.Invoke(sender, EventArgs.Empty);
+                    _logger.AddObjectToQueue((IBall)sender);
                 }
             }
             public override double GetX(int number)
