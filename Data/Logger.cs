@@ -6,12 +6,9 @@ namespace Data
     internal class Logger
     {
         ConcurrentQueue<string> _queue;
-        private StreamWriter _streamWriter;
-
         public Logger()
         {
             _queue = new ConcurrentQueue<string>();
-            _streamWriter = new StreamWriter("logs.json");
             WriteToFile();
         }
 
@@ -27,6 +24,7 @@ namespace Data
         {
             Task.Run(async () =>
             {
+                using StreamWriter _streamWriter = new StreamWriter("logs.json");
                 while (true)
                 {
                     if (_queue.Count > 0)
