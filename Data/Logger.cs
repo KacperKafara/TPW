@@ -1,19 +1,17 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Text.Json;
 
 namespace Data
 {
     internal class Logger
     {
-        readonly ConcurrentQueue<string> _queue;
-        readonly object _lock = new();
-        readonly private Stopwatch _stopwatch;
+        ConcurrentQueue<string> _queue;
+        private StreamWriter _streamWriter;
 
         public Logger()
         {
             _queue = new ConcurrentQueue<string>();
-            _stopwatch = new Stopwatch();
+            _streamWriter = new StreamWriter("logs.json");
             WriteToFile();
         }
 
@@ -31,24 +29,21 @@ namespace Data
             {
                 while (true)
                 {
-                    _stopwatch.Restart();
-                    _stopwatch.Start();
                     if (_queue.Count > 0)
                     {
-                        lock (_lock)
+                        while (!_queue.IsEmpty)
                         {
                             if (_queue.TryDequeue(out string item))
                             {
-                                File.AppendAllText("logs.json", item);
+                                _streamWriter.WriteLine(item);
                             }
                         }
+                        await _streamWriter.FlushAsync();
                     }
                     else
                     {
                         await Task.Delay(100);
                     }
-                    _stopwatch.Stop();
-                    await Task.Delay((int)_stopwatch.ElapsedMilliseconds);
                 }
             });
         }
