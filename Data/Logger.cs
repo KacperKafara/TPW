@@ -12,10 +12,9 @@ namespace Data
             WriteToFile();
         }
 
-        public void AddObjectToQueue(IBall obj)
+        public void AddObjectToQueue(string jsonString)
         {
-            string jsonString = JsonSerializer.Serialize(obj);
-            string date = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+            string date = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm:ss.fff");
             string log = "{" + String.Format("\n\t\"Date\": \"{0}\",\n\t\"Info\":{1}\n", date, jsonString) + "}\n";
             _queue.Enqueue(log);
         }

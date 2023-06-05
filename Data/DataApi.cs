@@ -1,4 +1,6 @@
-﻿namespace Data
+﻿using System.Text.Json;
+
+namespace Data
 {
     public abstract class DataApi
     {
@@ -52,7 +54,8 @@
                 if (sender != null)
                 {
                     BallEvent?.Invoke(sender, EventArgs.Empty);
-                    _logger.AddObjectToQueue((IBall)sender);
+                    string jsonString = JsonSerializer.Serialize(sender);
+                    _logger.AddObjectToQueue(jsonString);
                 }
             }
             public override double GetX(int number)
