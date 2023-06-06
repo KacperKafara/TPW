@@ -53,9 +53,8 @@ namespace Data
             {
                 if (sender != null)
                 {
-                    BallEvent?.Invoke(sender, EventArgs.Empty);
-                    string jsonString = JsonSerializer.Serialize(sender);
-                    _logger.AddObjectToQueue(jsonString);
+                    BallEvent?.Invoke(sender, EventArgs.Empty);;
+                    _logger.AddObjectToQueue((IBall)sender);
                 }
             }
             public override double GetX(int number)
