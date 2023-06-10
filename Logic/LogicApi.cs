@@ -7,8 +7,7 @@ namespace Logic
     {
         public abstract void CreateBalls(int number);
         public abstract int GetNumberOfBalls();
-        public abstract double GetX(int number);
-        public abstract double GetY(int number);
+        public abstract Vector2 GetPosition(int number);
         public abstract event EventHandler LogicApiEvent;
         public static LogicApi Instance(DataApi dataApi)
         {
@@ -40,13 +39,9 @@ namespace Logic
             {
                 return dataApi.GetNumberOfBalls();
             }
-            public override double GetX(int number)
+            public override Vector2 GetPosition(int number)
             {
-                return dataApi.GetX(number);
-            }
-            public override double GetY(int number)
-            {
-                return dataApi.GetY(number);
+                return dataApi.GetPosition(number);
             }
 
             private void Ball_PositionChanged(object sender, EventArgs e)

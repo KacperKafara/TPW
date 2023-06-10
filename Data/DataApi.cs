@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using System.Numerics;
 
 namespace Data
 {
@@ -8,8 +8,7 @@ namespace Data
         public abstract int Height { get; }
         public abstract void CreateBalls(int number);
         public abstract int GetNumberOfBalls();
-        public abstract double GetX(int number);
-        public abstract double GetY(int number);
+        public abstract Vector2 GetPosition(int number);
         public abstract IBall GetBall(int number);
         public abstract event EventHandler BallEvent;
 
@@ -53,17 +52,13 @@ namespace Data
             {
                 if (sender != null)
                 {
-                    BallEvent?.Invoke(sender, EventArgs.Empty);;
-                    _logger.AddObjectToQueue((IBall)sender);
+                    BallEvent?.Invoke(sender, EventArgs.Empty);
+                    _logger.AddObjectToQueue((IBall)sender, DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm:ss.fff"));
                 }
             }
-            public override double GetX(int number)
+            public override Vector2 GetPosition(int number)
             {
-                return Balls[number].Position.X;
-            }
-            public override double GetY(int number)
-            {
-                return Balls[number].Position.Y;
+                return Balls[number].Position;
             }
             public override IBall GetBall(int number)
             {

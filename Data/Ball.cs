@@ -1,20 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Numerics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Data
 {
     public interface IBall
     {
         int ID { get; }
-        [JsonConverter(typeof(Vector2Converter))]
         Vector2 Position { get; }
         const int Radius = 50;
-        [JsonIgnore]
         float Weight { get; }
-        [JsonConverter(typeof(Vector2Converter))]
         Vector2 Speed { get; set; }
     }
 
@@ -103,22 +97,6 @@ namespace Data
                     await Task.Delay(delay);
                 }
             });
-        }
-    }
-
-    internal class Vector2Converter : JsonConverter<Vector2>
-    {
-        public override Vector2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Write(Utf8JsonWriter writer, Vector2 value, JsonSerializerOptions options)
-        {
-            writer.WriteStartObject();
-            writer.WriteNumber("X", value.X);
-            writer.WriteNumber("Y", value.Y);
-            writer.WriteEndObject();
         }
     }
 }

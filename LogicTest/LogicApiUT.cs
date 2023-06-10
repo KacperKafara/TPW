@@ -131,13 +131,9 @@ namespace LogicTest
                     BallEvent?.Invoke(sender, EventArgs.Empty);
                 }
             }
-            public override double GetX(int number)
+            public override Vector2 GetPosition(int number)
             {
-                return Balls[number].Position.X;
-            }
-            public override double GetY(int number)
-            {
-                return Balls[number].Position.Y;
+                return Balls[number].Position;
             }
             public override IBall GetBall(int number)
             {
@@ -168,15 +164,15 @@ namespace LogicTest
             LogicApi api = LogicApi.Instance(new Data());
             api.CreateBalls(1);
             Assert.AreEqual(1, api.GetNumberOfBalls());
-            double prev_x = api.GetX(0);
+            double prev_x = api.GetPosition(0).X;
             api.LogicApiEvent += (sender, args) =>
             {
-                if (prev_x > api.GetX(0))
+                if (prev_x > api.GetPosition(0).X)
                 {
-                    Assert.IsTrue(api.GetX(0) < 450);
+                    Assert.IsTrue(api.GetPosition(0).X < 450);
                     return;
                 }
-                prev_x = api.GetX(0);
+                prev_x = api.GetPosition(0).X;
             };
         }
 
@@ -186,20 +182,20 @@ namespace LogicTest
             LogicApi api = LogicApi.Instance(new Data());
             api.CreateBalls(2);
             Assert.AreEqual(2, api.GetNumberOfBalls());
-            double prev = CountDistance(api.GetX(0), api.GetX(1));
+            double prev = CountDistance(api.GetPosition(0).X, api.GetPosition(1).X);
             int testFlag = 0;
             api.LogicApiEvent += (sender, args) =>
             {
-                if (testFlag == 0 && prev <= CountDistance(api.GetX(0), api.GetX(1)))
+                if (testFlag == 0 && prev <= CountDistance(api.GetPosition(0).X, api.GetPosition(1).X))
                 {
                     testFlag = 1;
                 }
                 if (testFlag == 1)
                 {
-                    Assert.IsTrue(prev > CountDistance(api.GetX(0), api.GetX(1)));
+                    Assert.IsTrue(prev > CountDistance(api.GetPosition(0).X, api.GetPosition(1).X));
                     return;
                 }
-                prev = CountDistance(api.GetX(0), api.GetX(1));
+                prev = CountDistance(api.GetPosition(0).X, api.GetPosition(1).X);
             };
         }
         
